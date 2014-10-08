@@ -1,6 +1,5 @@
 package latmod.enkigaming.perms;
 
-import latmod.enkigaming.perms.json.Rank;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 

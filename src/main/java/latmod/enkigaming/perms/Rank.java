@@ -1,4 +1,4 @@
-package latmod.enkigaming.perms.json;
+package latmod.enkigaming.perms;
 
 import com.google.gson.annotations.Expose;
 

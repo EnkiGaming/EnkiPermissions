@@ -1,6 +1,6 @@
 package latmod.enkigaming.perms;
 
-import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.*;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class EnkiPermsEventHandler
@@ -16,5 +16,12 @@ public class EnkiPermsEventHandler
 	public void chatEvent(ServerChatEvent e)
 	{
 		//e.component = new ChatComponentTranslation();
+	}
+	
+	@SubscribeEvent
+	public void commandEvent(CommandEvent e)
+	{
+		if(e.command.getCommandName().equalsIgnoreCase("help"))
+			e.setCanceled(true);
 	}
 }
