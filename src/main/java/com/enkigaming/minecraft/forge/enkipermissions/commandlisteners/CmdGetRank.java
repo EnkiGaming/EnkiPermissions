@@ -1,9 +1,9 @@
-package latmod.enkigaming.perms.cmd;
+package com.enkigaming.minecraft.forge.enkipermissions.commandlisteners;
 
 import latmod.core.LatCoreMC;
 import latmod.core.mod.LMPlayer;
 import latmod.enkigaming.core.cmd.CmdEnki;
-import latmod.enkigaming.perms.Rank;
+import com.enkigaming.minecraft.forge.enkipermissions.ranks.Rank;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 

@@ -1,4 +1,4 @@
-package latmod.enkigaming.perms.cmd;
+package com.enkigaming.minecraft.forge.enkipermissions.commandlisteners;
 
 import latmod.enkigaming.core.cmd.CmdEnki;
 import net.minecraft.command.ICommandSender;

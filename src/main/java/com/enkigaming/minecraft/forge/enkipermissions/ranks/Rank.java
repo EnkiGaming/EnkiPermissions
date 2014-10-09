@@ -1,13 +1,9 @@
-package latmod.enkigaming.perms;
+package com.enkigaming.minecraft.forge.enkipermissions.ranks;
 
 import java.io.File;
 import java.util.*;
 
 import net.minecraft.command.ICommand;
-import latmod.core.LatCoreMC;
-import latmod.core.mod.LMPlayer;
-import latmod.core.util.*;
-import latmod.enkigaming.core.EnkiCore;
 
 import com.google.gson.annotations.Expose;
 

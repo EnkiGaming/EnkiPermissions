@@ -1,5 +1,7 @@
-package latmod.enkigaming.perms;
+package com.enkigaming.minecraft.forge.enkipermissions.eventhandlers;
 
+import com.enkigaming.minecraft.forge.enkipermissions.ranks.Rank;
+import com.enkigaming.minecraft.forge.enkipermissions.ranks.Rank;
 import latmod.core.LatCoreMC;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
