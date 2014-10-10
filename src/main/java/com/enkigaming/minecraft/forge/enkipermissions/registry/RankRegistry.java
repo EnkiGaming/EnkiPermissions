@@ -1,22 +1,28 @@
 package com.enkigaming.minecraft.forge.enkipermissions.registry;
 
-import com.enkigaming.minecraft.forge.enkipermissions.EnkiPerms;
+import com.enkigaming.minecraft.forge.enkilib.filehandling.CSVFileHandler;
+import com.enkigaming.minecraft.forge.enkilib.filehandling.CSVFileHandler.CSVRowMember;
+import com.enkigaming.minecraft.forge.enkilib.filehandling.FileHandler;
 import com.enkigaming.minecraft.forge.enkipermissions.ranks.Rank;
 import com.enkigaming.minecraft.forge.enkipermissions.registry.exceptions.ItemWithNameAlreadyPresentException;
 import java.io.File;
-import java.util.Collection;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import net.minecraft.entity.player.EntityPlayer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import scala.actors.threadpool.Arrays;
 
 public class RankRegistry
 {
     public RankRegistry(File saveFolder)
-    { this.saveFolder = saveFolder; }
-    
-    protected final File saveFolder;
+    {
+        
+    }
+
     protected final Map<String, Rank> ranks = new HashMap<String, Rank>();
+    protected final FileHandler fileHandler;
     
     /**
      * Gets the registered rank with the specified name.
@@ -93,7 +99,9 @@ public class RankRegistry
     { return removeRank(rank.getName()); }
     
     public void save()
-    {}
+    {
+
+    }
     
     public void load()
     {}
