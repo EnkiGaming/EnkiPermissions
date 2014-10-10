@@ -1,5 +1,6 @@
 package com.enkigaming.minecraft.forge.enkipermissions.permissions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +8,8 @@ public class PermissionNode
 {
     public PermissionNode(String node)
     {
+        node = node.trim();
+        
         boolean nodeRemovesPermission = false;
         boolean nodeAddsPermissionOverriding = false;
         boolean nodeCoversChildren = false;
@@ -23,9 +26,14 @@ public class PermissionNode
                 nodeAddsPermissionOverriding = true;
                 node = node.substring(1);
             }
+            
+            node = node.trim();
         }
         
         List<String> nodeParts = Arrays.asList(node.split("\\.")); // I have to escape the escape character o-o
+        
+        for(int i = 0; i < nodeParts.size(); i++)
+            nodeParts.set(i, nodeParts.get(i));
         
         if(nodeParts.get(nodeParts.size() - 1).equalsIgnoreCase("*"))
         {
@@ -37,6 +45,14 @@ public class PermissionNode
         removesPermission = nodeRemovesPermission;
         addsPermissionOverriding = nodeAddsPermissionOverriding;
         coversChildren = nodeCoversChildren;
+    }
+    
+    public PermissionNode(PermissionNode node)
+    {
+        parts = new ArrayList<String>(node.parts);
+        removesPermission = node.removesPermission;
+        addsPermissionOverriding = node.addsPermissionOverriding;
+        coversChildren = node.coversChildren;
     }
     
     //immutable class
@@ -114,5 +130,35 @@ public class PermissionNode
             string += "*";
         
         return string;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj == null)
+            return false;
+        if(getClass() != obj.getClass())
+            return false;
+        final PermissionNode other = (PermissionNode) obj;
+        if(this.parts != other.parts && (this.parts == null || !this.parts.equals(other.parts)))
+            return false;
+        if(this.removesPermission != other.removesPermission)
+            return false;
+        if(this.addsPermissionOverriding != other.addsPermissionOverriding)
+            return false;
+        if(this.coversChildren != other.coversChildren)
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 83 * hash + (this.parts != null ? this.parts.hashCode() : 0);
+        hash = 83 * hash + (this.removesPermission ? 1 : 0);
+        hash = 83 * hash + (this.addsPermissionOverriding ? 1 : 0);
+        hash = 83 * hash + (this.coversChildren ? 1 : 0);
+        return hash;
     }
 }

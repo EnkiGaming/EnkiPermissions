@@ -48,4 +48,10 @@ public class Rank
     
     public boolean hasPermissionDirectly(String permission)
     {}
+    
+    public Collection<PermissionNode> getPermissions()
+    {}
+    
+    public Collection<PermissionNode> getPermissionsDirectOnly()
+    {}
 }

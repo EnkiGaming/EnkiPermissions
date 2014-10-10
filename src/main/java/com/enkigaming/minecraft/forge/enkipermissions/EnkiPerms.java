@@ -44,10 +44,18 @@ public class EnkiPerms
     {}
     
     public void loadData()
-    {}
+    {
+        permissions.load();
+        ranks.load();
+        playerRanks.load();
+    }
     
     public void saveData()
-    {}
+    {
+        permissions.save();
+        ranks.save();
+        playerRanks.save();
+    }
         
     public static EnkiPerms getInstance()
     { return instance; }
