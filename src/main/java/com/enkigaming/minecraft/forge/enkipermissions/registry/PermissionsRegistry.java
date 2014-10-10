@@ -40,10 +40,10 @@ public class PermissionsRegistry
                 {
                     hasPermission = true;
                     
-                    if(permission.removesPermission())
+                    if(current.removesPermission())
                         hasPermissionCanceller = true;
                     
-                    if(permission.addPermissionOverriding())
+                    if(current.addPermissionOverriding())
                         hasPermissionEnsurer = true;
                 }
             }
