@@ -30,7 +30,7 @@ public class RankRegistry
     
     protected FileHandler makeFileHandler(File saveFolder)
     {
-        return new TreeFileHandler("RankRegistry", new File(saveFolder, "ranks.txt"))
+        return new TreeFileHandler("RankRegistry", new File(saveFolder, "Ranks.txt"))
         {
             final String prefixTag = "Prefix: ";
             final String suffixTag = "Suffix: ";
@@ -162,6 +162,9 @@ public class RankRegistry
             }
         };
     }
+    
+    public FileHandler getFileHandler()
+    { return fileHandler; }
     
     /**
      * Gets the registered rank with the specified name.

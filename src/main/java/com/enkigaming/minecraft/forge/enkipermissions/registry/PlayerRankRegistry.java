@@ -3,6 +3,7 @@ package com.enkigaming.minecraft.forge.enkipermissions.registry;
 import com.enkigaming.minecraft.forge.enkilib.EnkiLib;
 import com.enkigaming.minecraft.forge.enkilib.filehandling.CSVFileHandler;
 import com.enkigaming.minecraft.forge.enkilib.filehandling.CSVFileHandler.CSVRowMember;
+import com.enkigaming.minecraft.forge.enkilib.filehandling.FileHandler;
 import com.enkigaming.minecraft.forge.enkipermissions.ranks.Rank;
 import java.io.File;
 import java.util.ArrayList;
@@ -20,9 +21,9 @@ import net.minecraft.entity.player.EntityPlayer;
 public class PlayerRankRegistry
 {
     public PlayerRankRegistry(File saveFolder)
-    { this.saveFolder = saveFolder; }
+    { fileHandler = makeFileHandler(saveFolder); }
     
-    protected final File saveFolder;
+    protected final FileHandler fileHandler;
     protected final Map<UUID, String> playerRanks = new HashMap<UUID, String>(); // Map<PlayerId, RankName>
     protected String defaultRank; // synchronize with ranks.
     
@@ -30,7 +31,7 @@ public class PlayerRankRegistry
     
     protected CSVFileHandler makeFileHandler(File saveFolder)
     {
-        return new CSVFileHandler("PlayerRankRegistry", saveFolder, "Not all rows could be read from playerranks.csv - as many as could be were.")
+        return new CSVFileHandler("PlayerRankRegistry", new File(saveFolder, "PlayerRanks.csv"), "Not all rows could be read from PlayerRanks.csv - as many as could be were.")
         {
             List<Map.Entry<UUID, String>> ranksList;
             
@@ -99,25 +100,34 @@ public class PlayerRankRegistry
         };
     }
     
+    public FileHandler getFileHandler()
+    { return fileHandler; }
+    
     public Map<UUID, String> getPlayerRanks()
     {
-        synchronized(playerRanks)
+        playerRanksLock.lock();
+        
+        try
         { return new HashMap<UUID, String>(playerRanks); }
+        finally
+        { playerRanksLock.unlock(); }
     }
     
     public String getPlayerRank(UUID playerId)
     {
-        String rank;
+        playerRanksLock.lock();
         
-        synchronized(playerRanks)
+        try
         {
-            rank = playerRanks.get(playerId);
+            String rank = playerRanks.get(playerId);
             
             if(rank == null)
                 return defaultRank;
             
             return rank;
         }
+        finally
+        { playerRanksLock.unlock(); }
     }
     
     public String getPlayerRank(EntityPlayer player)
@@ -127,26 +137,38 @@ public class PlayerRankRegistry
     {
         Collection<UUID> players = new ArrayList<UUID>();
         
-        synchronized(playerRanks)
+        playerRanksLock.lock();
+        
+        try
         {
             for(Entry<UUID, String> i : playerRanks.entrySet())
                 if(rankName.equals(i.getValue()))
                     players.add(i.getKey());
         }
+        finally
+        { playerRanksLock.unlock(); }
         
         return players;
     }
     
     public String getDefaultRank()
     {
-        synchronized(playerRanks)
+        playerRanksLock.lock();
+        
+        try
         { return defaultRank; }
+        finally
+        { playerRanksLock.unlock(); }
     }
     
     public String setPlayerRank(UUID playerId, String rankName)
     {
-        synchronized(playerRanks)
+        playerRanksLock.lock();
+        
+        try
         { return playerRanks.put(playerId, rankName); }
+        finally
+        { playerRanksLock.unlock(); }
     }
     
     public String setPlayerrank(EntityPlayer player, String rankName)
@@ -154,12 +176,16 @@ public class PlayerRankRegistry
     
     public String setDefaultRank(String rank)
     {
-        synchronized(playerRanks)
+        playerRanksLock.lock();
+        
+        try
         {
             String oldRank = defaultRank;
             defaultRank = rank;
             return oldRank;
         }
+        finally
+        { playerRanksLock.unlock(); }
     }
     
     public String setDefaultRank(Rank rank)
