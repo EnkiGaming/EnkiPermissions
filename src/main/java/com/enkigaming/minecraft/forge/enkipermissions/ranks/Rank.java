@@ -166,6 +166,23 @@ public class Rank
         { return new ArrayList<PermissionNode>(permissions); }
     }
     
+    public boolean givePermission(PermissionNode permission)
+    {
+        synchronized(permissions)
+        {
+            if(permissions.contains(permission))
+                return false;
+            else
+            {
+                permissions.add(permission);
+                return true;
+            }
+        }
+    }
+    
+    public boolean givePermission(String permission)
+    { return givePermission(new PermissionNode(permission)); }
+    
     public Collection<Rank> getPermissionIncluders()
     {
         // To do: Add detection for circular permissions inclusion.
@@ -193,5 +210,11 @@ public class Rank
     {
         synchronized(permissionIncluders)
         { return new ArrayList<Rank>(permissionIncluders); }
+    }
+    
+    public boolean addPermissionIncluder(Rank includer)
+    {
+        synchronized(permissionIncluders)
+        { return permissionIncluders.add(includer); }
     }
 }
