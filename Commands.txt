@@ -1,15 +1,29 @@
 Commands
 
-rank get <LastRecordedPlayerName>
-rank set <LastRecordedPlayerName> <RankName>
+rank get <LastRecordedPlayerName>            Gets a player’s rank.
+rank set <LastRecordedPlayerName> <RankName> Sets a player’s rank.
 
-rank prefix set <RankName> <NewPrefix>
-rank prefix get <RankName>
+rank prefix set <RankName> <NewPrefix> Sets a rank’s prefix.
+rank prefix get <RankName>             Gets a rank’s prefix.
 
-rank suffix set <RankName> <NewSuffix>
-rank suffix get <RankName>
+rank suffix set <RankName> <NewSuffix> Sets a rank’s suffix.
+rank suffix get <RankName>             Gets a rank’s suffix.
 
-permission give <LastRecordedPlayerName> <permission>
-permission remove <LastRecordedPlayerName> <permission>
-permission removeall <LastRecordedPlayerName>
-permission check <LastRecordedPlayerName> <permission>
+rank permission give               <RankName> <Permission>        Gives a given permission.
+rank permission remove             <RankName> <Permission>        Removes a given permission. (Except inherited)
+rank permission removeall          <RankName> <Permission>        Removes all permissions (Except inherited) from a rank.
+rank permission cancel             <RankName> <Permission>        Gives a rank a permission that cancels out* the given one.
+rank permission check              <RankName> <Permission>        Checks whether a rank has a given permission.
+rank permission include            <RankName> <RankNameToInclude> Adds a rank that this rank inherits permissions from.
+rank permission removeincluder     <RankName> <RankNameToRemove>  Stops a rank from inheriting permissions from another.
+rank permission removeallincluders <RankName>                     Stops a rank from inheriting permissions from any other.
+
+permission give      <LastRecordedPlayerName> <permission> Gives a given permission.
+permission remove    <LastRecordedPlayerName> <permission> Removes a given permission. (Except from ranks)
+permission removeall <LastRecordedPlayerName>              Removes all permissions (Except from ranks).
+permission cancel    <LastRecordedPlayerName> <permission> Gives a permission that cancels out* the given one.
+permission check     <LastRecordedPlayerName> <permission> Gets whether or not a player has a given permission.
+
+
+
+* A cancelling permission is one that appears in the permissions file as -SomeMod.SomePermission rather, which would cancel out SomeMod.SomePermission.
