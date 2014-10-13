@@ -1,0 +1,15 @@
+Commands
+
+rank get <LastRecordedPlayerName>
+rank set <LastRecordedPlayerName> <RankName>
+
+rank prefix set <RankName> <NewPrefix>
+rank prefix get <RankName>
+
+rank suffix set <RankName> <NewSuffix>
+rank suffix get <RankName>
+
+permission give <LastRecordedPlayerName> <permission>
+permission remove <LastRecordedPlayerName> <permission>
+permission removeall <LastRecordedPlayerName>
+permission check <LastRecordedPlayerName> <permission>
