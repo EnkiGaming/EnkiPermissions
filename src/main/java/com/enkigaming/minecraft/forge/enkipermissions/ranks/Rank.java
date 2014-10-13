@@ -206,6 +206,19 @@ public class Rank
         return includers;
     }
     
+    public Collection<String> getDirectPermissionIncluderNames()
+    {
+        Collection<String> names = new ArrayList<String>();
+        
+        synchronized(permissionIncluders)
+        {
+            for(Rank includer : permissionIncluders)
+                names.add(includer.getName());
+        }
+        
+        return names;
+    }
+    
     public Collection<Rank> getDirectPermissionIncluders()
     {
         synchronized(permissionIncluders)

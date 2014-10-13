@@ -10,6 +10,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,6 +186,26 @@ public class RankRegistry
         { ranksLock.unlock(); }
         
         return null;
+    }
+    
+    public Collection<Rank> getRanks()
+    {
+        ranksLock.lock();
+        
+        try
+        { return new ArrayList<Rank>(ranks.values()); }
+        finally
+        { ranksLock.unlock(); }
+    }
+    
+    public Collection<String> getRankNames()
+    {
+        Collection<String> rankNames = new ArrayList<String>();
+        
+        for(Rank rank : getRanks())
+            rankNames.add(rank.getName());
+        
+        return rankNames;
     }
     
     /**

@@ -11,7 +11,7 @@ rank suffix get <RankName>             Gets a rank’s suffix.
 
 rank permission give               <RankName> <Permission>        Gives a given permission.
 rank permission remove             <RankName> <Permission>        Removes a given permission. (Except inherited)
-rank permission removeall          <RankName> <Permission>        Removes all permissions (Except inherited) from a rank.
+rank permission removeall          <RankName>                     Removes all permissions (Except inherited) from a rank.
 rank permission cancel             <RankName> <Permission>        Gives a rank a permission that cancels out* the given one.
 rank permission check              <RankName> <Permission>        Checks whether a rank has a given permission.
 rank permission include            <RankName> <RankNameToInclude> Adds a rank that this rank inherits permissions from.
