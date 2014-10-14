@@ -1,6 +1,6 @@
-package com.enkigaming.minecraft.forge.enkipermissions.commandlisteners;
+package com.enkigaming.mcforge.enkipermissions.commandlisteners;
 
-import com.enkigaming.minecraft.forge.enkipermissions.EnkiPerms;
+import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
 import java.util.Arrays;
 import java.util.List;
 import net.minecraft.command.CommandBase;
@@ -134,7 +134,7 @@ public class CmdEnkiperms extends CommandBase
         if(!checkPermission(sender, "enkiperms.reloadfiles"))
             return;
         
-        EnkiPerms.getInstance().getFileHandling().load();
+        EnkiPerms.getInstance().loadData();
     }
     
     protected void handleEnkipermsHelp(ICommandSender sender, List<String> args)

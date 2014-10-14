@@ -1,7 +1,7 @@
-package com.enkigaming.minecraft.forge.enkipermissions.commandlisteners;
+package com.enkigaming.mcforge.enkipermissions.commandlisteners;
 
-import com.enkigaming.minecraft.forge.enkilib.EnkiLib;
-import com.enkigaming.minecraft.forge.enkipermissions.EnkiPerms;
+import com.enkigaming.mcforge.enkilib.EnkiLib;
+import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

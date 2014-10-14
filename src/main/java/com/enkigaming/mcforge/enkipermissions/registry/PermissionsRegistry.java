@@ -1,10 +1,10 @@
-package com.enkigaming.minecraft.forge.enkipermissions.registry;
+package com.enkigaming.mcforge.enkipermissions.registry;
 
-import com.enkigaming.minecraft.forge.enkilib.EnkiLib;
-import com.enkigaming.minecraft.forge.enkilib.filehandling.FileHandler;
-import com.enkigaming.minecraft.forge.enkilib.filehandling.TreeFileHandler;
-import com.enkigaming.minecraft.forge.enkilib.filehandling.TreeFileHandler.TreeMember;
-import com.enkigaming.minecraft.forge.enkipermissions.permissions.PermissionNode;
+import com.enkigaming.mcforge.enkilib.EnkiLib;
+import com.enkigaming.mcforge.enkilib.filehandling.FileHandler;
+import com.enkigaming.mcforge.enkilib.filehandling.TreeFileHandler;
+import com.enkigaming.mcforge.enkilib.filehandling.TreeFileHandler.TreeMember;
+import com.enkigaming.mcforge.enkipermissions.permissions.PermissionNode;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.io.File;

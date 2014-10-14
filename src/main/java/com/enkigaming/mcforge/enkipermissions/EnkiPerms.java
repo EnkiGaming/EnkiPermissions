@@ -1,10 +1,14 @@
-package com.enkigaming.minecraft.forge.enkipermissions;
+package com.enkigaming.mcforge.enkipermissions;
 
-import com.enkigaming.minecraft.forge.enkilib.filehandling.FileHandlerRegistry;
-import com.enkigaming.minecraft.forge.enkipermissions.permissions.PermissionNode;
-import com.enkigaming.minecraft.forge.enkipermissions.registry.PermissionsRegistry;
-import com.enkigaming.minecraft.forge.enkipermissions.registry.PlayerRankRegistry;
-import com.enkigaming.minecraft.forge.enkipermissions.registry.RankRegistry;
+import com.enkigaming.mcforge.enkilib.filehandling.FileHandlerRegistry;
+import com.enkigaming.mcforge.enkipermissions.commandlisteners.CmdEnkiperms;
+import com.enkigaming.mcforge.enkipermissions.commandlisteners.CmdPermission;
+import com.enkigaming.mcforge.enkipermissions.commandlisteners.CmdRank;
+import com.enkigaming.mcforge.enkipermissions.eventhandlers.WorldSaveEventHandler;
+import com.enkigaming.mcforge.enkipermissions.permissions.PermissionNode;
+import com.enkigaming.mcforge.enkipermissions.registry.PermissionsRegistry;
+import com.enkigaming.mcforge.enkipermissions.registry.PlayerRankRegistry;
+import com.enkigaming.mcforge.enkipermissions.registry.RankRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -12,14 +16,14 @@ import cpw.mods.fml.common.Mod.Instance;
 import java.io.File;
 import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
-import org.apache.commons.lang3.NotImplementedException;
+import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid = EnkiPerms.MODID, name = EnkiPerms.MODID, version = EnkiPerms.VERSION, acceptableRemoteVersions = "*")
 public class EnkiPerms
 {
     public static final String NAME = "EnkiPerms";
     public static final String MODID = "EnkiPerms";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "B1.0";
 
     @Instance(EnkiPerms.MODID)
     protected static EnkiPerms instance;
@@ -31,44 +35,48 @@ public class EnkiPerms
     protected File saveFolder;
     
     @EventHandler
-    public void preInit(FMLPreInitializationEvent e)
+    public void preInit(FMLPreInitializationEvent event)
     {
+        instance = this;
+        saveFolder = new File(event.getModConfigurationDirectory().getParentFile(), "plugins/EnkiPerms");
         initialiseRegistries();
-        
+        registerFileHandlers();
         loadData();
         registerEvents();
     }
     
     @EventHandler
-    public void registerCommands(FMLServerStartingEvent e)
+    public void registerCommands(FMLServerStartingEvent event)
     {
-        throw new NotImplementedException("To be implemented");
+        event.registerServerCommand(new CmdEnkiperms());
+        event.registerServerCommand(new CmdPermission());
+        event.registerServerCommand(new CmdRank());
     }
         
     private void initialiseRegistries()
     {
-        throw new NotImplementedException("To be implemented");
+        permissions = new PermissionsRegistry(saveFolder);
+        ranks = new RankRegistry(saveFolder);
+        playerRanks = new PlayerRankRegistry(saveFolder);
     }
     
     private void registerFileHandlers()
     {
-        throw new NotImplementedException("To be implemented");
+        fileHandling.register(permissions.getFileHandler());
+        fileHandling.register(ranks.getFileHandler());
+        fileHandling.register(playerRanks.getFileHandler());
     }
     
     private void registerEvents()
     {
-        throw new NotImplementedException("To be implemented");
+        MinecraftForge.EVENT_BUS.register(new WorldSaveEventHandler());
     }
     
     public void loadData()
-    {
-        throw new NotImplementedException("To be implemented");
-    }
+    { fileHandling.load(); }
     
     public void saveData()
-    {
-        throw new NotImplementedException("To be implemented");
-    }
+    { fileHandling.save(); }
         
     public static EnkiPerms getInstance()
     { return instance; }

@@ -1,11 +1,11 @@
-package com.enkigaming.minecraft.forge.enkipermissions.registry;
+package com.enkigaming.mcforge.enkipermissions.registry;
 
-import com.enkigaming.minecraft.forge.enkilib.EnkiLib;
-import com.enkigaming.minecraft.forge.enkilib.filehandling.CSVFileHandler;
-import com.enkigaming.minecraft.forge.enkilib.filehandling.CSVFileHandler.CSVRowMember;
-import com.enkigaming.minecraft.forge.enkilib.filehandling.FileHandler;
-import com.enkigaming.minecraft.forge.enkipermissions.EnkiPerms;
-import com.enkigaming.minecraft.forge.enkipermissions.ranks.Rank;
+import com.enkigaming.mcforge.enkilib.EnkiLib;
+import com.enkigaming.mcforge.enkilib.filehandling.CSVFileHandler;
+import com.enkigaming.mcforge.enkilib.filehandling.CSVFileHandler.CSVRowMember;
+import com.enkigaming.mcforge.enkilib.filehandling.FileHandler;
+import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
+import com.enkigaming.mcforge.enkipermissions.ranks.Rank;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class PlayerRankRegistry
     
     protected final FileHandler fileHandler;
     protected final Map<UUID, String> playerRanks = new HashMap<UUID, String>(); // Map<PlayerId, RankName>
-    protected String defaultRank; // synchronize with ranks.
+    //protected String defaultRank; // synchronize with ranks.
     
     protected Lock playerRanksLock = new ReentrantLock();
     
@@ -117,13 +117,14 @@ public class PlayerRankRegistry
     public String getPlayerRankName(UUID playerId)
     {
         playerRanksLock.lock();
+        String defaultRankName = EnkiPerms.getInstance().getRanks().getDefaultRankName();
         
         try
         {
             String rank = playerRanks.get(playerId);
             
             if(rank == null)
-                return defaultRank;
+                return defaultRankName;
             
             return rank;
         }
@@ -131,11 +132,11 @@ public class PlayerRankRegistry
         { playerRanksLock.unlock(); }
     }
     
+    public String getPlayerRankName(EntityPlayer player)
+    { return getPlayerRankName(player.getGameProfile().getId()); }
+    
     public Rank getPlayerRank(UUID playerId)
     { return EnkiPerms.getInstance().getRanks().getRank(getPlayerRankName(playerId)); }
-    
-    public String getPlayerRank(EntityPlayer player)
-    { return getPlayerRankName(player.getGameProfile().getId()); }
     
     public Collection<UUID> getPlayersWithRank(String rankName)
     {
@@ -155,16 +156,6 @@ public class PlayerRankRegistry
         return players;
     }
     
-    public String getDefaultRank()
-    {
-        playerRanksLock.lock();
-        
-        try
-        { return defaultRank; }
-        finally
-        { playerRanksLock.unlock(); }
-    }
-    
     public String setPlayerRank(UUID playerId, String rankName)
     {
         playerRanksLock.lock();
@@ -182,36 +173,6 @@ public class PlayerRankRegistry
     
     public String setPlayerrank(EntityPlayer player, String rankName)
     { return setPlayerRank(player.getGameProfile().getId(), rankName); }
-    
-    public String setDefaultRank(String rank)
-    {
-        playerRanksLock.lock();
-        
-        try
-        {
-            if(!EnkiPerms.getInstance().getRanks().containsRank(rank))
-                throw new IllegalArgumentException("Rank does not exist.");
-            
-            String oldRank = defaultRank;
-            defaultRank = rank;
-            return oldRank;
-        }
-        finally
-        { playerRanksLock.unlock(); }
-    }
-    
-    public String setDefaultRank(Rank rank)
-    { return setDefaultRank(rank.getName()); }
-    
-    public void clearDefaultRank()
-    {
-        playerRanksLock.lock();
-        
-        try
-        { defaultRank = null; }
-        finally
-        { playerRanksLock.unlock(); }
-    }
     
     /**
      * Removes the given rank from all players that have it, reverting them to the default rank.

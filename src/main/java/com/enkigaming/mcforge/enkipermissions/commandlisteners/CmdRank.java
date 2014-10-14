@@ -1,9 +1,9 @@
-package com.enkigaming.minecraft.forge.enkipermissions.commandlisteners;
+package com.enkigaming.mcforge.enkipermissions.commandlisteners;
 
-import com.enkigaming.minecraft.forge.enkilib.EnkiLib;
-import com.enkigaming.minecraft.forge.enkipermissions.EnkiPerms;
-import com.enkigaming.minecraft.forge.enkipermissions.ranks.Rank;
-import com.enkigaming.minecraft.forge.enkipermissions.registry.exceptions.ItemWithNameAlreadyPresentException;
+import com.enkigaming.mcforge.enkilib.EnkiLib;
+import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
+import com.enkigaming.mcforge.enkipermissions.ranks.Rank;
+import com.enkigaming.mcforge.enkipermissions.registry.exceptions.ItemWithNameAlreadyPresentException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -385,7 +385,7 @@ public class CmdRank extends CommandBase
         
         try
         {
-            EnkiPerms.getInstance().getPlayerRanks().setDefaultRank(args.get(0));
+            EnkiPerms.getInstance().getRanks().setDefaultRank(args.get(0));
             sender.addChatMessage(new ChatComponentText("Default rank set!"));
         }
         catch(IllegalArgumentException exception)

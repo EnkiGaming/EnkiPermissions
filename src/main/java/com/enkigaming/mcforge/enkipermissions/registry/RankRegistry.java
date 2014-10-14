@@ -1,12 +1,12 @@
-package com.enkigaming.minecraft.forge.enkipermissions.registry;
+package com.enkigaming.mcforge.enkipermissions.registry;
 
-import com.enkigaming.minecraft.forge.enkilib.filehandling.FileHandler;
-import com.enkigaming.minecraft.forge.enkilib.filehandling.TreeFileHandler;
-import com.enkigaming.minecraft.forge.enkilib.filehandling.TreeFileHandler.TreeMember;
-import com.enkigaming.minecraft.forge.enkipermissions.EnkiPerms;
-import com.enkigaming.minecraft.forge.enkipermissions.permissions.PermissionNode;
-import com.enkigaming.minecraft.forge.enkipermissions.ranks.Rank;
-import com.enkigaming.minecraft.forge.enkipermissions.registry.exceptions.ItemWithNameAlreadyPresentException;
+import com.enkigaming.mcforge.enkilib.filehandling.FileHandler;
+import com.enkigaming.mcforge.enkilib.filehandling.TreeFileHandler;
+import com.enkigaming.mcforge.enkilib.filehandling.TreeFileHandler.TreeMember;
+import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
+import com.enkigaming.mcforge.enkipermissions.permissions.PermissionNode;
+import com.enkigaming.mcforge.enkipermissions.ranks.Rank;
+import com.enkigaming.mcforge.enkipermissions.registry.exceptions.ItemWithNameAlreadyPresentException;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.io.File;
@@ -27,6 +27,7 @@ public class RankRegistry
 
     protected final Map<String, Rank> ranks = new HashMap<String, Rank>();
     protected final FileHandler fileHandler;
+    protected Rank defaultRank; // synchronise with ranks.
     
     protected final Lock ranksLock = new ReentrantLock();
     
@@ -160,7 +161,14 @@ public class RankRegistry
             @Override
             protected void onNoFileToInterpret()
             {
+                ranks.clear();
                 
+                Rank adminRank = new Rank("Admin");
+                adminRank.givePermission("*");
+                
+                ranks.put("Admin", adminRank);
+                ranks.put("Member", new Rank("Member"));
+                System.out.println("No ranks file found, loaded default ranks.");
             }
         };
     }
@@ -187,6 +195,86 @@ public class RankRegistry
         { ranksLock.unlock(); }
         
         return null;
+    }
+    
+    /**
+     * Gets the default rank.
+     * @return The default rank, or null if none is set.
+     */
+    public Rank getDefaultRank()
+    {
+        ranksLock.lock();
+        
+        try
+        { return defaultRank; }
+        finally
+        { ranksLock.unlock(); }
+    }
+    
+    /**
+     * Gets the name of the default rank.
+     * @return The name of the default rank, or null if none is set.
+     */
+    public String getDefaultRankName()
+    {
+        ranksLock.lock();
+        
+        try
+        { return defaultRank.getName(); }
+        finally
+        { ranksLock.unlock(); }
+    }
+
+    /**
+     * Sets the default rank.
+     * @param rank The rank to make the default rank.
+     * @return The previous default rank, or null if there was none.
+     */
+    public Rank setDefaultRank(Rank rank)
+    {
+        ranksLock.lock();
+        
+        try
+        {
+            Rank old = defaultRank;
+            defaultRank = rank;
+            return old;
+        }
+        finally
+        { ranksLock.unlock(); }
+    }
+    
+    /**
+     * Sets the default rank.
+     * @param rankName The name of the registered rank to make the default.
+     * @return The previous default rank.
+     * @throws IllegalArgumentException If a rank by the given name is not found.
+     */
+    public Rank setDefaultRank(String rankName) throws IllegalArgumentException
+    {
+        ranksLock.lock();
+        
+        try
+        {
+            Rank newRank = null;
+            
+            FindNewRank:
+            for(Rank rank : ranks.values())
+                if(rank.getName().equalsIgnoreCase(rankName))
+                {
+                    newRank = rank;
+                    break FindNewRank;
+                }
+            
+            if(newRank == null)
+                throw new IllegalArgumentException("Rank does not exist");
+            
+            Rank oldRank = defaultRank;
+            defaultRank = newRank;
+            return oldRank;
+        }
+        finally
+        { ranksLock.unlock(); }
     }
     
     public Collection<Rank> getRanks()

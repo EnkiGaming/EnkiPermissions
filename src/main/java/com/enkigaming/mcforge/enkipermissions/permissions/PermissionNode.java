@@ -1,4 +1,4 @@
-package com.enkigaming.minecraft.forge.enkipermissions.permissions;
+package com.enkigaming.mcforge.enkipermissions.permissions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,12 +92,12 @@ public class PermissionNode
     
     public boolean covers(PermissionNode permission)
     {
-        if((coversChildren && parts.size() != permission.parts.size()) || parts.size() < permission.parts.size())
+        if((coversChildren && parts.size() <= permission.parts.size()) || parts.size() != permission.parts.size())
             return false;
         
         for(int i = 0; i < parts.size(); i++)
-                if(!parts.get(i).equalsIgnoreCase(permission.parts.get(i)))
-                    return false;
+            if(!parts.get(i).equalsIgnoreCase(permission.parts.get(i)))
+                return false;
         
         return true;
     }

@@ -1,6 +1,6 @@
-package com.enkigaming.minecraft.forge.enkipermissions.ranks;
+package com.enkigaming.mcforge.enkipermissions.ranks;
 
-import com.enkigaming.minecraft.forge.enkipermissions.permissions.PermissionNode;
+import com.enkigaming.mcforge.enkipermissions.permissions.PermissionNode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
