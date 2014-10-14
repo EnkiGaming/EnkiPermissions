@@ -819,7 +819,7 @@ public class CmdRank extends CommandBase
         else if(args.get(0).equalsIgnoreCase("help"))
             handleRankHelpHelp(sender, args.subList(1, args.size()));
         else
-            sendSenderHelp(sender, HelpOption.rank);
+            sendSenderUsage(sender, HelpOption.rankHelp);
     }
     
     protected void handleRankHelpGet(ICommandSender sender, List<String> args)

@@ -13,3 +13,5 @@ enkiperms.permission.modifyincluders.rank
 enkiperms.permission.modifyincluders.player
 enkiperms.permission.check          .rank
 enkiperms.permission.check          .player
+
+enkiperms.reloadfiles

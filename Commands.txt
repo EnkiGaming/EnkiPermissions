@@ -57,6 +57,8 @@ permission help removeall
 permission help cancel
 permission help check
 
+enkiperms reloadfiles
+
 
 
 * A cancelling permission is one that appears in the permissions file as -SomeMod.SomePermission rather, which would cancel out SomeMod.SomePermission.

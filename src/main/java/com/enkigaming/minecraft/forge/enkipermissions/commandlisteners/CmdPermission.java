@@ -314,7 +314,7 @@ public class CmdPermission extends CommandBase
         else if(args.get(1).equalsIgnoreCase("help"))
             handlePermissionHelpHelp(sender, args.subList(1, args.size()));
         else
-            sendSenderHelp(sender, HelpOption.permission);
+            sendSenderUsage(sender, HelpOption.permissionHelp);
     }
     
     protected void handlePermissionHelpGive(ICommandSender sender, List<String> args)
