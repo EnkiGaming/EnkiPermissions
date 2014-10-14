@@ -26,6 +26,7 @@ rank permission removeallincluders <RankName>                     Stops a rank f
 rank help
 rank help get
 rank help set
+rank help setdefault
 rank help create
 rank help delete
 rank help prefix
@@ -48,6 +49,13 @@ permission remove    <LastRecordedPlayerName> <permission> Removes a given permi
 permission removeall <LastRecordedPlayerName>              Removes all permissions (Except from ranks).
 permission cancel    <LastRecordedPlayerName> <permission> Gives a permission that cancels out* the given one.
 permission check     <LastRecordedPlayerName> <permission> Gets whether or not a player has a given permission.
+
+permission help
+permission help give
+permission help remove
+permission help removeall
+permission help cancel
+permission help check
 
 
 

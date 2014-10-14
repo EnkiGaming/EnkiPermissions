@@ -222,6 +222,19 @@ public class PermissionsRegistry
     public boolean removePlayerPermission(EntityPlayer player, PermissionNode permission)
     { return removePlayerPermission(player.getGameProfile().getId(), permission); }
     
+    public void removePlayerPermissions(EntityPlayer player)
+    { removePlayerPermissions(player.getGameProfile().getId()); }
+    
+    public void removePlayerPermissions(UUID playerId)
+    {
+        playerPermissionsLock.lock();
+        
+        try
+        { playerPermissions.removeAll(playerId); }
+        finally
+        { playerPermissionsLock.unlock(); }
+    }
+    
     public Collection<PermissionNode> getPlayerPermissions(UUID playerId)
     {
         playerPermissionsLock.lock();

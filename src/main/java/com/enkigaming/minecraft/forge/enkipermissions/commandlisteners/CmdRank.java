@@ -329,6 +329,7 @@ public class CmdRank extends CommandBase
         {
             sender.addChatMessage(new ChatComponentText("There isn't a player with that name recorded."));
             sendSenderUsage(sender, HelpOption.rankGet);
+            return;
         }
 
         Rank rank = EnkiPerms.getInstance().getPlayerRanks().getPlayerRank(playerId);
@@ -356,6 +357,7 @@ public class CmdRank extends CommandBase
         {
             sender.addChatMessage(new ChatComponentText("There isn't a player with that name recorded."));
             sendSenderUsage(sender, HelpOption.rankSet);
+            return;
         }
         
         try
@@ -814,6 +816,10 @@ public class CmdRank extends CommandBase
             handleRankHelpSuffix(sender, args.subList(1, args.size()));
         else if(args.get(0).equalsIgnoreCase("permission"))
             handleRankHelpPermission(sender, args.subList(1, args.size()));
+        else if(args.get(0).equalsIgnoreCase("help"))
+            handleRankHelpHelp(sender, args.subList(1, args.size()));
+        else
+            sendSenderHelp(sender, HelpOption.rank);
     }
     
     protected void handleRankHelpGet(ICommandSender sender, List<String> args)
@@ -911,4 +917,7 @@ public class CmdRank extends CommandBase
     
     protected void handleRankHelpPermissionRemoveallincluders(ICommandSender sender, List<String> args)
     { sendSenderHelp(sender, HelpOption.rankPermissionRemoveallincluders); }
+    
+    protected void handleRankHelpHelp(ICommandSender sender, List<String> args)
+    { sendSenderHelp(sender, HelpOption.rankHelp); }
 }
