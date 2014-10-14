@@ -3,6 +3,7 @@ package com.enkigaming.minecraft.forge.enkipermissions.registry;
 import com.enkigaming.minecraft.forge.enkilib.filehandling.FileHandler;
 import com.enkigaming.minecraft.forge.enkilib.filehandling.TreeFileHandler;
 import com.enkigaming.minecraft.forge.enkilib.filehandling.TreeFileHandler.TreeMember;
+import com.enkigaming.minecraft.forge.enkipermissions.EnkiPerms;
 import com.enkigaming.minecraft.forge.enkipermissions.permissions.PermissionNode;
 import com.enkigaming.minecraft.forge.enkipermissions.ranks.Rank;
 import com.enkigaming.minecraft.forge.enkipermissions.registry.exceptions.ItemWithNameAlreadyPresentException;
@@ -264,7 +265,26 @@ public class RankRegistry
         ranksLock.lock();
         
         try
-        { return ranks.remove(rankName); }
+        {
+            Collection<String> toRemove = new ArrayList<String>();
+            
+            for(String key : ranks.keySet())
+                if(key.equalsIgnoreCase(rankName))
+                    toRemove.add(key);
+            
+            Rank removed = null;
+            
+            for(String remove : toRemove)
+                removed = ranks.remove(remove);
+            
+            if(removed != null)
+                for(Rank rank : ranks.values())
+                    rank.removePermissionIncluder(removed);
+            
+            EnkiPerms.getInstance().getPlayerRanks().loseRank(rankName);
+            
+            return removed;
+        }
         finally
         { ranksLock.unlock(); }
     }
@@ -276,4 +296,20 @@ public class RankRegistry
      */
     public Rank removeRank(Rank rank)
     { return removeRank(rank.getName()); }
+    
+    public boolean containsRank(String rankName)
+    {
+        ranksLock.lock();
+        
+        try
+        {
+            for(Rank rank : ranks.values())
+                if(rank.getName().equalsIgnoreCase(rankName))
+                    return true;
+            
+            return false;
+        }
+        finally
+        { ranksLock.unlock(); }
+    }
 }

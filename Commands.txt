@@ -3,6 +3,11 @@ Commands
 rank get <LastRecordedPlayerName>            Gets a player’s rank.
 rank set <LastRecordedPlayerName> <RankName> Sets a player’s rank.
 
+rank setdefault <RankName>
+
+rank create <RankName> Creates a rank with the given name.
+rank delete <RankName> Deletes the rank with the given name, and removes it as a permission included to all other ranks.
+
 rank prefix set <RankName> <NewPrefix> Sets a rank’s prefix.
 rank prefix get <RankName>             Gets a rank’s prefix.
 
@@ -18,6 +23,26 @@ rank permission include            <RankName> <RankNameToInclude> Adds a rank th
 rank permission removeincluder     <RankName> <RankNameToRemove>  Stops a rank from inheriting permissions from another.
 rank permission removeallincluders <RankName>                     Stops a rank from inheriting permissions from any other.
 
+rank help
+rank help get
+rank help set
+rank help create
+rank help delete
+rank help prefix
+rank help prefix get
+rank help prefix set
+rank help suffix get
+rank help suffix set
+rank help permission
+rank help permission give
+rank help permission remove
+rank help permission removeall
+rank help permission cancel
+rank help permission check
+rank help permission include
+rank help permission removeincluder
+rank help permission removeallincluders
+
 permission give      <LastRecordedPlayerName> <permission> Gives a given permission.
 permission remove    <LastRecordedPlayerName> <permission> Removes a given permission. (Except from ranks)
 permission removeall <LastRecordedPlayerName>              Removes all permissions (Except from ranks).
@@ -27,3 +52,5 @@ permission check     <LastRecordedPlayerName> <permission> Gets whether or not a
 
 
 * A cancelling permission is one that appears in the permissions file as -SomeMod.SomePermission rather, which would cancel out SomeMod.SomePermission.
+
+<base command> help should display a message describing the command, followed by a usage guide and/or subcommands.

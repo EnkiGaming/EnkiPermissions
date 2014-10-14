@@ -4,6 +4,7 @@ import com.enkigaming.minecraft.forge.enkilib.EnkiLib;
 import com.enkigaming.minecraft.forge.enkilib.filehandling.CSVFileHandler;
 import com.enkigaming.minecraft.forge.enkilib.filehandling.CSVFileHandler.CSVRowMember;
 import com.enkigaming.minecraft.forge.enkilib.filehandling.FileHandler;
+import com.enkigaming.minecraft.forge.enkipermissions.EnkiPerms;
 import com.enkigaming.minecraft.forge.enkipermissions.ranks.Rank;
 import java.io.File;
 import java.util.ArrayList;
@@ -113,7 +114,7 @@ public class PlayerRankRegistry
         { playerRanksLock.unlock(); }
     }
     
-    public String getPlayerRank(UUID playerId)
+    public String getPlayerRankName(UUID playerId)
     {
         playerRanksLock.lock();
         
@@ -130,8 +131,11 @@ public class PlayerRankRegistry
         { playerRanksLock.unlock(); }
     }
     
+    public Rank getPlayerRank(UUID playerId)
+    { return EnkiPerms.getInstance().getRanks().getRank(getPlayerRankName(playerId)); }
+    
     public String getPlayerRank(EntityPlayer player)
-    { return getPlayerRank(player.getGameProfile().getId()); }
+    { return getPlayerRankName(player.getGameProfile().getId()); }
     
     public Collection<UUID> getPlayersWithRank(String rankName)
     {
@@ -166,7 +170,12 @@ public class PlayerRankRegistry
         playerRanksLock.lock();
         
         try
-        { return playerRanks.put(playerId, rankName); }
+        {
+            if(EnkiPerms.getInstance().getRanks().containsRank(rankName))
+                return playerRanks.put(playerId, rankName);
+            else
+                throw new IllegalArgumentException("Rank does not exist.");
+        }
         finally
         { playerRanksLock.unlock(); }
     }
@@ -180,6 +189,9 @@ public class PlayerRankRegistry
         
         try
         {
+            if(!EnkiPerms.getInstance().getRanks().containsRank(rank))
+                throw new IllegalArgumentException("Rank does not exist.");
+            
             String oldRank = defaultRank;
             defaultRank = rank;
             return oldRank;
@@ -190,4 +202,39 @@ public class PlayerRankRegistry
     
     public String setDefaultRank(Rank rank)
     { return setDefaultRank(rank.getName()); }
+    
+    public void clearDefaultRank()
+    {
+        playerRanksLock.lock();
+        
+        try
+        { defaultRank = null; }
+        finally
+        { playerRanksLock.unlock(); }
+    }
+    
+    /**
+     * Removes the given rank from all players that have it, reverting them to the default rank.
+     * If the passed rank is the default rank, removes that as well.
+     * 
+     * @param rankName The name of the rank to lose.
+     */
+    public void loseRank(String rankName)
+    {
+        playerRanksLock.lock();
+        
+        try
+        {
+            Collection<UUID> playersToLoseRank = new ArrayList<UUID>();
+            
+            for(Entry<UUID, String> entry : playerRanks.entrySet())
+                if(entry.getValue().equalsIgnoreCase(rankName))
+                    playersToLoseRank.add(entry.getKey());
+            
+            for(UUID id : playersToLoseRank)
+                playerRanks.remove(id);
+        }
+        finally
+        { playerRanksLock.unlock(); }
+    }
 }

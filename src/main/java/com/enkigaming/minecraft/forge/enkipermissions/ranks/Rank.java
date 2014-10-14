@@ -27,7 +27,7 @@ public class Rank
      * Other ranks which this rank includes the permissions of.
      */
     protected final Collection<Rank> permissionIncluders = new HashSet<Rank>();
-    protected final Collection<PermissionNode> permissions = new ArrayList<PermissionNode>();
+    protected final Collection<PermissionNode> permissions = new HashSet<PermissionNode>();
     
     public String getName()
     { return name; }
@@ -183,6 +183,21 @@ public class Rank
     public boolean givePermission(String permission)
     { return givePermission(new PermissionNode(permission)); }
     
+    public boolean removePermission(PermissionNode permission)
+    {
+        synchronized(permissions)
+        { return permissions.remove(permission); }
+    }
+    
+    public boolean removePermission(String permission)
+    { return removePermission(new PermissionNode(permission)); }
+    
+    public void removeAllPermissions()
+    {
+        synchronized(permissions)
+        { permissions.clear(); }
+    }
+    
     public Collection<Rank> getPermissionIncluders()
     {
         // To do: Add detection for circular permissions inclusion.
@@ -229,5 +244,17 @@ public class Rank
     {
         synchronized(permissionIncluders)
         { return permissionIncluders.add(includer); }
+    }
+    
+    public boolean removePermissionIncluder(Rank includer)
+    {
+        synchronized(permissionIncluders)
+        { return permissionIncluders.remove(includer); }
+    }
+    
+    public void removeAllPermissionIncluders()
+    {
+        synchronized(permissionIncluders)
+        { permissionIncluders.clear(); }
     }
 }

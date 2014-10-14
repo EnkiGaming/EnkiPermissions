@@ -1,6 +1,7 @@
 package com.enkigaming.minecraft.forge.enkipermissions;
 
 import com.enkigaming.minecraft.forge.enkilib.filehandling.FileHandlerRegistry;
+import com.enkigaming.minecraft.forge.enkipermissions.permissions.PermissionNode;
 import com.enkigaming.minecraft.forge.enkipermissions.registry.PermissionsRegistry;
 import com.enkigaming.minecraft.forge.enkipermissions.registry.PlayerRankRegistry;
 import com.enkigaming.minecraft.forge.enkipermissions.registry.RankRegistry;
@@ -9,6 +10,8 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import java.io.File;
+import java.util.UUID;
+import net.minecraft.entity.player.EntityPlayer;
 import org.apache.commons.lang3.NotImplementedException;
 
 @Mod(modid = EnkiPerms.MODID, name = EnkiPerms.MODID, version = EnkiPerms.VERSION, acceptableRemoteVersions = "*")
@@ -84,4 +87,18 @@ public class EnkiPerms
     
     public FileHandlerRegistry getFileHandling()
     { return fileHandling; }
+    
+    //========== Convenience Methods ==========
+    
+    public static boolean hasPermission(UUID playerId, String permission)
+    { return getInstance().getPermissions().playerHasPermission(playerId, permission); }
+    
+    public static boolean hasPermission(UUID playerId, PermissionNode permission)
+    { return getInstance().getPermissions().playerHasPermission(playerId, permission); }
+    
+    public static boolean hasPermission(EntityPlayer player, String permission)
+    { return getInstance().getPermissions().playerHasPermission(player, permission); }
+    
+    public static boolean hasPermission(EntityPlayer player, PermissionNode permission)
+    { return getInstance().getPermissions().playerHasPermission(player, permission); }
 }

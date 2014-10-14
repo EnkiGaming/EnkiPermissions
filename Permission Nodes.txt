@@ -1,0 +1,15 @@
+enkiperms.rank.getplayerrank
+enkiperms.rank.setplayerrank
+enkiperms.rank.create
+enkiperms.rank.delete
+enkiperms.rank.prefix.get
+enkiperms.rank.prefix.set
+enkiperms.rank.suffix.get
+enkiperms.rank.suffix.set
+
+enkiperms.permission.modify         .rank
+enkiperms.permission.modify         .player
+enkiperms.permission.modifyincluders.rank
+enkiperms.permission.modifyincluders.player
+enkiperms.permission.check          .rank
+enkiperms.permission.check          .player
