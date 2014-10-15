@@ -15,6 +15,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import java.io.File;
 import java.util.UUID;
+import java.util.logging.Logger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -23,7 +24,7 @@ public class EnkiPerms
 {
     public static final String NAME = "EnkiPerms";
     public static final String MODID = "EnkiPerms";
-    public static final String VERSION = "B1.0";
+    public static final String VERSION = "B1.0.0.1";
 
     @Instance(EnkiPerms.MODID)
     protected static EnkiPerms instance;
@@ -55,6 +56,7 @@ public class EnkiPerms
         
     private void initialiseRegistries()
     {
+        fileHandling = new FileHandlerRegistry(saveFolder, null);
         permissions = new PermissionsRegistry(saveFolder);
         ranks = new RankRegistry(saveFolder);
         playerRanks = new PlayerRankRegistry(saveFolder);

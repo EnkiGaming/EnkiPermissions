@@ -21,9 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class RankRegistry
 {
     public RankRegistry(File saveFolder)
-    {
-        fileHandler = makeFileHandler(saveFolder);
-    }
+    { fileHandler = makeFileHandler(saveFolder); }
 
     protected final Map<String, Rank> ranks = new HashMap<String, Rank>();
     protected final FileHandler fileHandler;
@@ -166,8 +164,14 @@ public class RankRegistry
                 Rank adminRank = new Rank("Admin");
                 adminRank.givePermission("*");
                 
+                Rank memberRank = new Rank("Member");
+                memberRank.givePermission("enkiperms.rank.getplayerrank");
+                memberRank.givePermission("enkiperms.rank.prefix.get");
+                memberRank.givePermission("enkiperms.rank.suffix.get");
+                memberRank.givePermission("enkiperms.permission.check.*");
+                
                 ranks.put("Admin", adminRank);
-                ranks.put("Member", new Rank("Member"));
+                ranks.put("Member", memberRank);
                 System.out.println("No ranks file found, loaded default ranks.");
             }
         };

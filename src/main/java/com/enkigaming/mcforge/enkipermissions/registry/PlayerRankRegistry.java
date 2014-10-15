@@ -26,7 +26,6 @@ public class PlayerRankRegistry
     
     protected final FileHandler fileHandler;
     protected final Map<UUID, String> playerRanks = new HashMap<UUID, String>(); // Map<PlayerId, RankName>
-    //protected String defaultRank; // synchronize with ranks.
     
     protected Lock playerRanksLock = new ReentrantLock();
     
