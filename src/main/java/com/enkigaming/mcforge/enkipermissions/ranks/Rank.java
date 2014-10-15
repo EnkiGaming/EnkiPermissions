@@ -2,10 +2,9 @@ package com.enkigaming.mcforge.enkipermissions.ranks;
 
 import com.enkigaming.mcforge.enkipermissions.permissions.PermissionNode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.UUID;
-import scala.actors.threadpool.Arrays;
 
 public class Rank
 {
@@ -26,8 +25,8 @@ public class Rank
     /**
      * Other ranks which this rank includes the permissions of.
      */
-    protected final Collection<Rank> permissionIncluders = new HashSet<Rank>();
-    protected final Collection<PermissionNode> permissions = new HashSet<PermissionNode>();
+    protected final Collection<Rank> permissionIncluders = new ArrayList<Rank>();
+    protected final Collection<PermissionNode> permissions = new ArrayList<PermissionNode>();
     
     public String getName()
     { return name; }

@@ -2,7 +2,6 @@ package com.enkigaming.mcforge.enkipermissions.registry;
 
 import com.enkigaming.mcforge.enkilib.filehandling.FileHandler;
 import com.enkigaming.mcforge.enkilib.filehandling.TreeFileHandler;
-import com.enkigaming.mcforge.enkilib.filehandling.TreeFileHandler.TreeMember;
 import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
 import com.enkigaming.mcforge.enkipermissions.permissions.PermissionNode;
 import com.enkigaming.mcforge.enkipermissions.ranks.Rank;
@@ -44,36 +43,36 @@ public class RankRegistry
             {}
 
             @Override
-            protected List<TreeMember> getTreeStructureOfSaveData()
+            protected List<TreeNode> getTreeStructureOfSaveData()
             {
                 ranksLock.lock();
                 
                 try
                 {
-                    List<TreeMember> rankTrees = new ArrayList<TreeMember>();
+                    List<TreeNode> rankTrees = new ArrayList<TreeNode>();
 
                     for(Rank rank : ranks.values())
                     {
-                        TreeMember rankTree = new TreeMember(rank.getName());
+                        TreeNode rankTree = new TreeNode(rank.getName());
 
-                        rankTree.addMember(new TreeMember(prefixTag + rank.getUsernamePrefix()));
-                        rankTree.addMember(new TreeMember(suffixTag + rank.getUsernameSuffix()));
-                        rankTree.addMember(new TreeMember(blankSpace));
+                        rankTree.addChild(new TreeNode(prefixTag + rank.getUsernamePrefix()));
+                        rankTree.addChild(new TreeNode(suffixTag + rank.getUsernameSuffix()));
+                        rankTree.addChild(new TreeNode(blankSpace));
 
-                        TreeMember permissionIncludersTree = new TreeMember(permissionIncludersTag);
+                        TreeNode permissionIncludersTree = new TreeNode(permissionIncludersTag);
 
                         for(Rank permissionIncluder : rank.getDirectPermissionIncluders())
-                            permissionIncludersTree.addMember(new TreeMember(permissionIncluder.getName()));
+                            permissionIncludersTree.addChild(new TreeNode(permissionIncluder.getName()));
 
-                        TreeMember permissionTree = new TreeMember(permissionsTag);
+                        TreeNode permissionTree = new TreeNode(permissionsTag);
 
                         for(PermissionNode permission : rank.getPermissions())
-                            permissionTree.addMember(new TreeMember(permission.toString()));
+                            permissionTree.addChild(new TreeNode(permission.toString()));
 
-                        rankTree.addMember(permissionIncludersTree);
-                        rankTree.addMember(new TreeMember(blankSpace));
-                        rankTree.addMember(permissionTree);
-                        rankTree.addMember(new TreeMember(blankSpace));
+                        rankTree.addChild(permissionIncludersTree);
+                        rankTree.addChild(new TreeNode(blankSpace));
+                        rankTree.addChild(permissionTree);
+                        rankTree.addChild(new TreeNode(blankSpace));
 
                         rankTrees.add(rankTree);
                     }
@@ -93,50 +92,44 @@ public class RankRegistry
             {}
 
             @Override
-            protected boolean interpretTree(List<TreeMember> list)
+            protected boolean interpretTree(List<TreeNode> list)
             {
                 Map<String, Rank> ranksLoaded = new HashMap<String, Rank>();
                 Multimap<String, Rank> permissionIncludersToBeAdded = HashMultimap.<String, Rank>create();
                 // Multimap<Includer rank name to be added, ranks to be added to>
                 
-                for(TreeMember rankTree : list)
+                for(TreeNode rankTree : list)
                 {
                     String rankName = rankTree.getName();
+                    Rank rank = new Rank(rankName);
                     
-                    if(!rankName.trim().isEmpty())
+                    for(TreeNode rankPropertyTree : rankTree.getChildren())
                     {
-                        Rank rank = new Rank(rankName);
-                        
-                        for(TreeMember rankValue : rankTree.getMembers())
+                        if(rankPropertyTree.getName().startsWith(prefixTag))
+                            rank.setUsernamePrefix(rankPropertyTree.getName().substring(prefixTag.length()));
+                        else if(rankPropertyTree.getName().startsWith(suffixTag))
+                            rank.setUsernameSuffix(rankPropertyTree.getName().substring(suffixTag.length()));
+                        else if(rankPropertyTree.getName().startsWith(permissionIncludersTag))
                         {
-                            if(rankValue.getName().equalsIgnoreCase(prefixTag))
-                                rank.setUsernamePrefix(rankValue.getName().substring(prefixTag.length()));
-                            else if(rankValue.getName().equalsIgnoreCase(suffixTag))
+                            for(TreeNode permissionIncluder : rankPropertyTree.getChildren())
                             {
-                                rank.setUsernameSuffix(rankValue.getName().substring(suffixTag.length()));
-                            }
-                            else if(rankValue.getName().equalsIgnoreCase(permissionIncludersTag))
-                            {
-                                for(TreeMember permissionIncluderValue : rankValue.getMembers())
-                                {
-                                    if(ranksLoaded.containsKey(permissionIncluderValue.getName()))
-                                        rank.addPermissionIncluder(ranksLoaded.get(permissionIncluderValue.getName()));
-                                    else
-                                        permissionIncludersToBeAdded.put(permissionIncluderValue.getName(), rank);
-                                }
-                            }
-                            else if(rankValue.getName().equalsIgnoreCase(permissionsTag))
-                            {
-                                for(TreeMember permissionValue : rankValue.getMembers())
-                                    if(!permissionValue.getName().isEmpty())
-                                        rank.givePermission(permissionValue.getName());
+                                if(ranksLoaded.containsKey(permissionIncluder.getName()))
+                                    rank.addPermissionIncluder(ranksLoaded.get(permissionIncluder.getName()));
+                                else
+                                    permissionIncludersToBeAdded.put(permissionIncluder.getName(), rank);
                             }
                         }
-                        
+                        else if(rankPropertyTree.getName().startsWith(permissionsTag))
+                        {
+                            for(TreeNode permission : rankPropertyTree.getChildren())
+                                if(!permission.getName().isEmpty())
+                                    rank.givePermission(permission.getName());
+                        }
                         if(permissionIncludersToBeAdded.containsKey(rankName))
-                            for(Rank toAddToAsIncluder : permissionIncludersToBeAdded.get(rankName))
-                                toAddToAsIncluder.addPermissionIncluder(rank);
+                            for(Rank rankToAddToAsIncluder : permissionIncludersToBeAdded.get(rankName))
+                                rankToAddToAsIncluder.addPermissionIncluder(rank);
                     }
+                    ranksLoaded.put(rankName, rank);
                 }
                 
                 ranksLock.lock();
@@ -159,20 +152,27 @@ public class RankRegistry
             @Override
             protected void onNoFileToInterpret()
             {
-                ranks.clear();
+                ranksLock.lock();
                 
-                Rank adminRank = new Rank("Admin");
-                adminRank.givePermission("*");
-                
-                Rank memberRank = new Rank("Member");
-                memberRank.givePermission("enkiperms.rank.getplayerrank");
-                memberRank.givePermission("enkiperms.rank.prefix.get");
-                memberRank.givePermission("enkiperms.rank.suffix.get");
-                memberRank.givePermission("enkiperms.permission.check.*");
-                
-                ranks.put("Admin", adminRank);
-                ranks.put("Member", memberRank);
-                System.out.println("No ranks file found, loaded default ranks.");
+                try
+                {
+                    ranks.clear();
+
+                    Rank adminRank = new Rank("Admin");
+                    adminRank.givePermission("*");
+
+                    Rank memberRank = new Rank("Member");
+                    memberRank.givePermission("enkiperms.rank.getplayerrank");
+                    memberRank.givePermission("enkiperms.rank.prefix.get");
+                    memberRank.givePermission("enkiperms.rank.suffix.get");
+                    memberRank.givePermission("enkiperms.permission.check.*");
+
+                    ranks.put("Admin", adminRank);
+                    ranks.put("Member", memberRank);
+                    System.out.println("No ranks file found, loaded default ranks.");
+                }
+                finally
+                { ranksLock.unlock(); }
             }
         };
     }

@@ -3,7 +3,6 @@ package com.enkigaming.mcforge.enkipermissions.registry;
 import com.enkigaming.mcforge.enkilib.EnkiLib;
 import com.enkigaming.mcforge.enkilib.filehandling.FileHandler;
 import com.enkigaming.mcforge.enkilib.filehandling.TreeFileHandler;
-import com.enkigaming.mcforge.enkilib.filehandling.TreeFileHandler.TreeMember;
 import com.enkigaming.mcforge.enkipermissions.permissions.PermissionNode;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -44,26 +43,26 @@ public class PermissionsRegistry
             }
 
             @Override
-            protected List<TreeMember> getTreeStructureOfSaveData()
+            protected List<TreeNode> getTreeStructureOfSaveData()
             {
-                Map<String, TreeMember> members = new HashMap<String, TreeMember>();
+                Map<String, TreeNode> members = new HashMap<String, TreeNode>();
                 
                 for(Map.Entry<UUID, PermissionNode> entry : permissionEntries)
                 {
                     String idAsString = entry.getKey().toString();
                     
-                    TreeMember treeMember = members.get(idAsString);
+                    TreeNode treeMember = members.get(idAsString);
                     
                     if(treeMember == null)
                     {
-                        treeMember = new TreeMember(idAsString);
+                        treeMember = new TreeNode(idAsString);
                         members.put(treeMember.getName(), treeMember);
                     }
                     
-                    treeMember.addMember(new TreeMember(entry.getValue().toString()));
+                    treeMember.addChild(new TreeNode(entry.getValue().toString()));
                 }
                 
-                for(TreeMember treeMember : members.values())
+                for(TreeNode treeMember : members.values())
                 {
                     UUID id = UUID.fromString(treeMember.getName());
                     String lastRecordedUsername = EnkiLib.getInstance().getUsernameCache().getLastRecordedNameOf(id);
@@ -72,7 +71,7 @@ public class PermissionsRegistry
                         treeMember.setName(treeMember.getName() + idNameSeparator + lastRecordedUsername);
                 }
                 
-                return new ArrayList<TreeMember>(members.values());
+                return new ArrayList<TreeNode>(members.values());
             }
 
             @Override
@@ -84,11 +83,11 @@ public class PermissionsRegistry
             { playerPermissionsLock.lock(); }
 
             @Override
-            protected boolean interpretTree(List<TreeMember> list)
+            protected boolean interpretTree(List<TreeNode> list)
             {
                 Multimap<UUID, PermissionNode> permissionsMap = ArrayListMultimap.<UUID, PermissionNode>create();
                 
-                for(TreeMember playerMember : list)
+                for(TreeNode playerMember : list)
                 {
                     if(!playerMember.getName().isEmpty())
                     {
@@ -108,7 +107,7 @@ public class PermissionsRegistry
                         catch(IllegalArgumentException exception)
                         { return false; }
                         
-                        for(TreeMember permissionMember : playerMember.getMembers())
+                        for(TreeNode permissionMember : playerMember.getChildren())
                             permissionsMap.put(id, new PermissionNode(permissionMember.getName()));
                     }
                 }

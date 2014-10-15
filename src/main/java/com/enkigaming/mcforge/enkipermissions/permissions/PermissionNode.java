@@ -16,21 +16,25 @@ public class PermissionNode
         
         for(boolean finishedPermissionPrefixes = false; finishedPermissionPrefixes == false; )
         {
+            finishedPermissionPrefixes = true;
+            
             if(node.startsWith("-"))
             {
                 nodeRemovesPermission = true;
                 node = node.substring(1);
+                finishedPermissionPrefixes = false;
             }
             else if(node.startsWith("+"))
             {
                 nodeAddsPermissionOverriding = true;
                 node = node.substring(1);
+                finishedPermissionPrefixes = false;
             }
             
             node = node.trim();
         }
         
-        List<String> nodeParts = Arrays.asList(node.split("\\.")); // I have to escape the escape character o-o
+        List<String> nodeParts = new ArrayList<String>(Arrays.asList(node.split("\\."))); // I have to escape the escape character o-o
         
         for(int i = 0; i < nodeParts.size(); i++)
             nodeParts.set(i, nodeParts.get(i));
@@ -92,14 +96,38 @@ public class PermissionNode
     
     public boolean covers(PermissionNode permission)
     {
-        if((coversChildren && parts.size() <= permission.parts.size()) || parts.size() != permission.parts.size())
-            return false;
+        boolean covers = false;
         
-        for(int i = 0; i < parts.size(); i++)
-            if(!parts.get(i).equalsIgnoreCase(permission.parts.get(i)))
-                return false;
+        if(coversChildren)
+        {
+            if((permission.coversChildren && permission.parts.size() >= parts.size()) || permission.parts.size() > parts.size())
+            {
+                covers = true;
+                
+                if(parts.size() == permission.parts.size() && !permission.coversChildren())
+                    covers = false;
+                
+                for(int partIndex = 0; partIndex < parts.size() && covers; partIndex++)
+                    if(!parts.get(partIndex).equalsIgnoreCase(permission.parts.get(partIndex)))
+                        covers = false;
+            }
+        }
+        else
+        {
+            if(permission.parts.size() == parts.size())
+            {
+                covers = true;
+                
+                if(permission.coversChildren)
+                    covers = false;
+                
+                for(int partIndex = 0; partIndex < parts.size() && covers; partIndex++)
+                    if(!parts.get(partIndex).equalsIgnoreCase(permission.parts.get(partIndex)))
+                        covers = false;
+            }
+        }
         
-        return true;
+        return covers;
     }
     
     public boolean isCoveredBy(PermissionNode permission)

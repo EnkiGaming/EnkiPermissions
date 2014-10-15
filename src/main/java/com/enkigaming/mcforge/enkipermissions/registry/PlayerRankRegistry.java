@@ -84,6 +84,9 @@ public class PlayerRankRegistry
             @Override
             protected List<CSVRowMember> getRow(int i)
             {
+                if(i >= ranksList.size())
+                    return null;
+                
                 String lastRecordedUsername = EnkiLib.getInstance().getUsernameCache().getLastRecordedNameOf(ranksList.get(i).getKey());
                 
                 if(lastRecordedUsername == null)
