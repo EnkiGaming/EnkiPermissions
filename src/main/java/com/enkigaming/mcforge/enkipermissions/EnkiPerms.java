@@ -25,7 +25,7 @@ public class EnkiPerms
 {
     public static final String NAME = "EnkiPerms";
     public static final String MODID = "EnkiPerms";
-    public static final String VERSION = "B1.0.1.2";
+    public static final String VERSION = "B1.0.1.3";
 
     @Instance(EnkiPerms.MODID)
     protected static EnkiPerms instance;

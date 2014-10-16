@@ -392,8 +392,13 @@ public class RankRegistry
                 removed = ranks.remove(remove);
             
             if(removed != null)
+            {
                 for(Rank rank : ranks.values())
                     rank.removePermissionIncluder(removed);
+                
+                if(defaultRank == removed)
+                    defaultRank = null;
+            }
             
             EnkiPerms.getInstance().getPlayerRanks().loseRank(rankName);
             
