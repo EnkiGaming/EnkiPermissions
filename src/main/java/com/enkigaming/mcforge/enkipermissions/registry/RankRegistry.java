@@ -36,6 +36,7 @@ public class RankRegistry
             final String suffixTag = "Suffix: ";
             final String permissionIncludersTag = "Permission Includers:";
             final String permissionsTag = "Permissions:";
+            final String defaultRankTag = "Default Rank";
             final String blankSpace = "";
             
             @Override
@@ -68,6 +69,9 @@ public class RankRegistry
 
                         for(PermissionNode permission : rank.getPermissions())
                             permissionTree.addChild(new TreeNode(permission.toString()));
+                        
+                        if(rank.equals(defaultRank))
+                            rankTree.addChild(new TreeNode(defaultRankTag));
 
                         rankTree.addChild(permissionIncludersTree);
                         rankTree.addChild(new TreeNode(blankSpace));
@@ -98,6 +102,9 @@ public class RankRegistry
                 Multimap<String, Rank> permissionIncludersToBeAdded = HashMultimap.<String, Rank>create();
                 // Multimap<Includer rank name to be added, ranks to be added to>
                 
+                Rank loadedDefaultRank = null;
+                boolean multipleDefaultsDetected = false;
+                
                 for(TreeNode rankTree : list)
                 {
                     String rankName = rankTree.getName();
@@ -125,6 +132,14 @@ public class RankRegistry
                                 if(!permission.getName().isEmpty())
                                     rank.givePermission(permission.getName());
                         }
+                        else if(rankPropertyTree.getName().startsWith(defaultRankTag))
+                        {
+                            if(loadedDefaultRank == null)
+                                loadedDefaultRank = rank;
+                            else
+                                multipleDefaultsDetected = true;
+                        }
+                        
                         if(permissionIncludersToBeAdded.containsKey(rankName))
                             for(Rank rankToAddToAsIncluder : permissionIncludersToBeAdded.get(rankName))
                                 rankToAddToAsIncluder.addPermissionIncluder(rank);
@@ -138,6 +153,10 @@ public class RankRegistry
                 {
                     ranks.clear();
                     ranks.putAll(ranksLoaded);
+                    defaultRank = loadedDefaultRank;
+                    
+                    if(multipleDefaultsDetected)
+                        System.out.println("Multiple default ranks detected. Default rank chosen: " + defaultRank.getName());
                 }
                 finally
                 { ranksLock.unlock(); }
@@ -169,6 +188,9 @@ public class RankRegistry
 
                     ranks.put("Admin", adminRank);
                     ranks.put("Member", memberRank);
+                    
+                    defaultRank = memberRank;
+                    
                     System.out.println("No ranks file found, loaded default ranks.");
                 }
                 finally

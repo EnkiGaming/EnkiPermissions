@@ -25,7 +25,7 @@ public class EnkiPerms
 {
     public static final String NAME = "EnkiPerms";
     public static final String MODID = "EnkiPerms";
-    public static final String VERSION = "B1.0.1.1";
+    public static final String VERSION = "B1.0.1.2";
 
     @Instance(EnkiPerms.MODID)
     protected static EnkiPerms instance;
@@ -39,12 +39,6 @@ public class EnkiPerms
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        System.out.println("If the log stops here, getting a permission node from a string is responsible.");
-        PermissionNode node = new PermissionNode("*");
-        System.out.println("Second try");
-        node = new PermissionNode("enkiperms.rank.get");
-        System.out.println("It's not the nodes.");
-        
         instance = this;
         saveFolder = new File(event.getModConfigurationDirectory().getParentFile(), "plugins/EnkiPerms");
         initialiseRegistries();

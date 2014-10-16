@@ -3,6 +3,7 @@ package com.enkigaming.mcforge.enkipermissions.registry;
 import com.enkigaming.mcforge.enkilib.EnkiLib;
 import com.enkigaming.mcforge.enkilib.filehandling.FileHandler;
 import com.enkigaming.mcforge.enkilib.filehandling.TreeFileHandler;
+import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
 import com.enkigaming.mcforge.enkipermissions.permissions.PermissionNode;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -141,11 +142,27 @@ public class PermissionsRegistry
         boolean hasPermissionCanceller = false; // -permission
         boolean hasPermissionEnsurer = false; // +permission
         
+        Collection<PermissionNode> rankPermissions = EnkiPerms.getInstance().getPlayerRanks().getPlayerRank(playerId).getPermissions();
+        
         playerPermissionsLock.lock();
         
         try
         {
             for(PermissionNode current : playerPermissions.get(playerId))
+            {
+                if(current.covers(permission))
+                {
+                    hasPermission = true;
+                    
+                    if(current.removesPermission())
+                        hasPermissionCanceller = true;
+                    
+                    if(current.addPermissionOverriding())
+                        hasPermissionEnsurer = true;
+                }
+            }
+            
+            for(PermissionNode current : rankPermissions)
             {
                 if(current.covers(permission))
                 {
