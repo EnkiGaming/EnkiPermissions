@@ -1,7 +1,7 @@
 package com.enkigaming.mcforge.enkipermissions.registry;
 
-import com.enkigaming.mcforge.enkilib.filehandling.FileHandler;
-import com.enkigaming.mcforge.enkilib.filehandling.TreeFileHandler;
+import com.enkigaming.lib.filehandling.FileHandler;
+import com.enkigaming.lib.filehandling.TreeFileHandler;
 import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
 import com.enkigaming.mcforge.enkipermissions.permissions.PermissionNode;
 import com.enkigaming.mcforge.enkipermissions.ranks.Rank;

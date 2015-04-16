@@ -1,12 +1,11 @@
 package com.enkigaming.mcforge.enkipermissions;
 
-import com.enkigaming.mcforge.enkilib.filehandling.FileHandlerRegistry;
+import com.enkigaming.lib.filehandling.FileHandlerRegistry;
 import com.enkigaming.mcforge.enkipermissions.commandlisteners.CmdEnkiperms;
 import com.enkigaming.mcforge.enkipermissions.commandlisteners.CmdPermission;
 import com.enkigaming.mcforge.enkipermissions.commandlisteners.CmdRank;
 import com.enkigaming.mcforge.enkipermissions.eventhandlers.WorldSaveEventHandler;
 import com.enkigaming.mcforge.enkipermissions.permissions.PermissionNode;
-import com.enkigaming.mcforge.enkipermissions.ranks.Rank;
 import com.enkigaming.mcforge.enkipermissions.registry.PermissionsRegistry;
 import com.enkigaming.mcforge.enkipermissions.registry.PlayerRankRegistry;
 import com.enkigaming.mcforge.enkipermissions.registry.RankRegistry;
@@ -16,16 +15,15 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import java.io.File;
 import java.util.UUID;
-import java.util.logging.Logger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid = EnkiPerms.MODID, name = EnkiPerms.MODID, version = EnkiPerms.VERSION, acceptableRemoteVersions = "*")
 public class EnkiPerms
 {
-    public static final String NAME = "EnkiPerms";
-    public static final String MODID = "EnkiPerms";
-    public static final String VERSION = "B1.0.1.3";
+    public static final String NAME = "EnkiPermissions";
+    public static final String MODID = "EnkiPermissions";
+    public static final String VERSION = "1.0.2";
 
     @Instance(EnkiPerms.MODID)
     protected static EnkiPerms instance;

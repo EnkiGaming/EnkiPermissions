@@ -18,3 +18,15 @@ libs/enkilib-b-1-0.jar
 libs/enkilib.jar
 
 libs/enkilib-release.jar
+
+gradlew
+
+build.gradle
+
+gradle/wrapper/gradle-wrapper.properties
+
+gradle/wrapper/gradle-wrapper.jar
+
+build.xml
+
+gradlew.bat

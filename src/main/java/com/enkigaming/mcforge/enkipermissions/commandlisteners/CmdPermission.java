@@ -1,6 +1,6 @@
 package com.enkigaming.mcforge.enkipermissions.commandlisteners;
 
-import com.enkigaming.mcforge.enkilib.EnkiLib;
+import com.enkigaming.mcforge.lib.EnkiLib;
 import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -182,11 +182,12 @@ public class CmdPermission extends CommandBase
         if(!checkPermission(sender, "enkiperms.permission.modify.player"))
             return;
         
-        UUID playerId = EnkiLib.getInstance().getUsernameCache().getLastRecordedUUIDForName(args.get(0));
+        UUID playerId = EnkiLib.getLastRecordedIDForName(args.get(0));
 
         if(playerId == null)
         {
-            sender.addChatMessage(new ChatComponentText("There isn't a player with that name recorded."));
+            sender.addChatMessage(new ChatComponentText("There isn't a player with the name \"" + args.get(0)
+                                                        + "\" recorded."));
             sendSenderUsage(sender, HelpOption.permissionGive);
             return;
         }
@@ -206,11 +207,12 @@ public class CmdPermission extends CommandBase
         if(!checkPermission(sender, "enkiperms.permission.modify.player"))
             return;
         
-        UUID playerId = EnkiLib.getInstance().getUsernameCache().getLastRecordedUUIDForName(args.get(0));
+        UUID playerId = EnkiLib.getLastRecordedIDForName(args.get(0));
 
         if(playerId == null)
         {
-            sender.addChatMessage(new ChatComponentText("There isn't a player with that name recorded."));
+            sender.addChatMessage(new ChatComponentText("There isn't a player with the name \"" + args.get(0)
+                                                        + "\" recorded."));
             sendSenderUsage(sender, HelpOption.permissionRemove);
             return;
         }
@@ -232,11 +234,12 @@ public class CmdPermission extends CommandBase
         if(!checkPermission(sender, "enkiperms.permission.modify.player"))
             return;
         
-        UUID playerId = EnkiLib.getInstance().getUsernameCache().getLastRecordedUUIDForName(args.get(0));
+        UUID playerId = EnkiLib.getLastRecordedIDForName(args.get(0));
 
         if(playerId == null)
         {
-            sender.addChatMessage(new ChatComponentText("There isn't a player with that name recorded."));
+            sender.addChatMessage(new ChatComponentText("There isn't a player with the name \"" + args.get(0)
+                                                        + "\" recorded."));
             sendSenderUsage(sender, HelpOption.permissionRemoveall);
             return;
         }
@@ -256,16 +259,18 @@ public class CmdPermission extends CommandBase
         if(!checkPermission(sender, "enkiperms.permission.modify.player"))
             return;
         
-        UUID playerId = EnkiLib.getInstance().getUsernameCache().getLastRecordedUUIDForName(args.get(0));
+        UUID playerId = EnkiLib.getLastRecordedIDForName(args.get(0));
 
         if(playerId == null)
         {
-            sender.addChatMessage(new ChatComponentText("There isn't a player with that name recorded."));
+            sender.addChatMessage(new ChatComponentText("There isn't a player with the name \"" + args.get(0)
+                                                        + "\" recorded."));
             sendSenderUsage(sender, HelpOption.permissionCancel);
             return;
         }
         
-        if(EnkiPerms.getInstance().getPermissions().givePlayerPermission(playerId, "-" + args.get(1))) // if player already had the permission
+        // if player already had the permission
+        if(EnkiPerms.getInstance().getPermissions().givePlayerPermission(playerId, "-" + args.get(1)))
             sender.addChatMessage(new ChatComponentText("Player already had cancelling permission."));
         else
             sender.addChatMessage(new ChatComponentText("Player permission cancelled!"));
@@ -282,11 +287,12 @@ public class CmdPermission extends CommandBase
         if(!checkPermission(sender, "enkiperms.permission.modify.player"))
             return;
         
-        UUID playerId = EnkiLib.getInstance().getUsernameCache().getLastRecordedUUIDForName(args.get(0));
+        UUID playerId = EnkiLib.getLastRecordedIDForName(args.get(0));
 
         if(playerId == null)
         {
-            sender.addChatMessage(new ChatComponentText("There isn't a player with that name recorded."));
+            sender.addChatMessage(new ChatComponentText("There isn't a player with the name \"" + args.get(0)
+                                                        + "\" recorded."));
             sendSenderUsage(sender, HelpOption.permissionCheck);
             return;
         }

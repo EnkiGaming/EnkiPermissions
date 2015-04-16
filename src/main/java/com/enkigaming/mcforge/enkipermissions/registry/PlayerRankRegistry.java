@@ -1,9 +1,9 @@
 package com.enkigaming.mcforge.enkipermissions.registry;
 
-import com.enkigaming.mcforge.enkilib.EnkiLib;
-import com.enkigaming.mcforge.enkilib.filehandling.CSVFileHandler;
-import com.enkigaming.mcforge.enkilib.filehandling.CSVFileHandler.CSVRowMember;
-import com.enkigaming.mcforge.enkilib.filehandling.FileHandler;
+import com.enkigaming.mcforge.lib.EnkiLib;
+import com.enkigaming.lib.filehandling.CSVFileHandler;
+import com.enkigaming.lib.filehandling.CSVFileHandler.CSVRowMember;
+import com.enkigaming.lib.filehandling.FileHandler;
 import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
 import com.enkigaming.mcforge.enkipermissions.ranks.Rank;
 import java.io.File;

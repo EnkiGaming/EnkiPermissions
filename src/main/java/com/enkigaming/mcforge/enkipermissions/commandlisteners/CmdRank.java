@@ -1,6 +1,6 @@
 package com.enkigaming.mcforge.enkipermissions.commandlisteners;
 
-import com.enkigaming.mcforge.enkilib.EnkiLib;
+import com.enkigaming.mcforge.lib.EnkiLib;
 import com.enkigaming.mcforge.enkipermissions.EnkiPerms;
 import com.enkigaming.mcforge.enkipermissions.ranks.Rank;
 import com.enkigaming.mcforge.enkipermissions.registry.exceptions.ItemWithNameAlreadyPresentException;
@@ -323,11 +323,12 @@ public class CmdRank extends CommandBase
         if(!checkPermission(sender, "enkiperms.rank.getplayerrank"))
             return;
         
-        UUID playerId = EnkiLib.getInstance().getUsernameCache().getLastRecordedUUIDForName(args.get(0));
+        UUID playerId = EnkiLib.getLastRecordedIDForName(args.get(0));
 
         if(playerId == null)
         {
-            sender.addChatMessage(new ChatComponentText("There isn't a player with that name recorded."));
+            sender.addChatMessage(new ChatComponentText("There isn't a player with the name \"" + args.get(0)
+                                                        + "\" recorded."));
             sendSenderUsage(sender, HelpOption.rankGet);
             return;
         }
@@ -351,11 +352,12 @@ public class CmdRank extends CommandBase
         if(!checkPermission(sender, "enkiperms.rank.setplayerrank"))
             return;
         
-        UUID playerId = EnkiLib.getInstance().getUsernameCache().getLastRecordedUUIDForName(args.get(0));
+        UUID playerId = EnkiLib.getLastRecordedIDForName(args.get(0));
         
         if(playerId == null)
         {
-            sender.addChatMessage(new ChatComponentText("There isn't a player with that name recorded."));
+            sender.addChatMessage(new ChatComponentText("There isn't a player with the name \"" + args.get(0)
+                                                        + "\" recorded."));
             sendSenderUsage(sender, HelpOption.rankSet);
             return;
         }
